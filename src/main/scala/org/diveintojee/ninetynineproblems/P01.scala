@@ -1,14 +1,13 @@
-// P01 (*) Find the last element of a list.
-//     Example:
-//     scala> last(List(1, 1, 2, 3, 5, 8))
-//     res0: Int = 8
+package org.diveintojee.ninetynineproblems
 
-// The start of the definition of last should be
-//     def last[A](l: List[A]): A = ...
-// The `[A]` allows us to handle lists of any type.
+import java.util.NoSuchElementException
 
 object P01 extends App {
 
-  def last[A] (list: List[A]): A = ???
+  def last[A] (list: List[A]): A = list match {
+    case head :: Nil  => head
+    case head :: tail  => last(tail)
+    case Nil          => throw new NoSuchElementException
+  }
 
 }
