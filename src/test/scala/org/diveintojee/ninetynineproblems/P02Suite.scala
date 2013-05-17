@@ -10,7 +10,7 @@ import org.diveintojee.ninetynineproblems.P02._
 class P02Suite extends FunSuite {
 
   test("penultimate should succeed") {
-    val actual: Int = penultimate(List(1, 1, 2, 3, 5, 8))
+    val actual: Int = penultimate(List(1, 2, 3, 5, 8))
     val expected: Int = 5
     assert(actual === expected)
   }

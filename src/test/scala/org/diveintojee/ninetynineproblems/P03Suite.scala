@@ -1,18 +1,17 @@
 package org.diveintojee.ninetynineproblems
 
-import org.junit._
 import org.junit.runner.RunWith
 import org.scalatest.FunSuite
 import org.scalatest.junit.JUnitRunner
 
-import org.diveintojee.ninetynineproblems.P01._
+import org.diveintojee.ninetynineproblems.P03._
 
 @RunWith(classOf[JUnitRunner])
-class P01Suite extends FunSuite {
+class P03Suite extends FunSuite {
 
-  test("last should succeed") {
-    val actual: Int = last(List(1, 2, 3, 5, 8))
-    val expected: Int = 8
+  test("nth should succeed") {
+    val actual: Int = nth(2, List(1, 2, 3, 5, 8))
+    val expected: Int = 3
     assert(actual === expected)
   }
 }
