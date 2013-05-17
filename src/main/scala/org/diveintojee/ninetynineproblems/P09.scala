@@ -2,8 +2,8 @@ package org.diveintojee.ninetynineproblems
 
 object P09 extends App {
 
-  def pack (list: List[Any]): List[List[Any]] =
-    list.reverse.foldLeft(List[List[Any]]()) {
+  def pack[A] (list: List[A]): List[List[A]] =
+    list.reverse.foldLeft(List[List[A]]()) {
       case (head :: tail, x) if (x == head.head) => (x :: head) :: tail
       case (acc, x)                              => List(x) :: acc
     }
