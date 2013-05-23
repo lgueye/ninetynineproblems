@@ -11,10 +11,10 @@ import org.scalatest.matchers.ShouldMatchers
 class P24Suite extends FunSuite with ShouldMatchers {
 
   test("lotto should succeed") {
-    val resultListSize: Int = 6
-    val intSetSize: Int = 49
-    val actual: List[Int] = lotto(resultListSize, intSetSize)
-    assert(actual.size === resultListSize)
+    val count: Int = 6
+    val max: Int = 49
+    val actual: List[Int] = lotto(count, max)
+    assert(actual.size === count)
   }
 
 }
