@@ -10,12 +10,12 @@ import org.scalatest.matchers.ShouldMatchers
 @RunWith(classOf[JUnitRunner])
 class P21Suite extends FunSuite with ShouldMatchers {
 
-  test("removeAt should throw IndexOutOfBoundException with illegal bounds") {
+  test("insertAt should throw IndexOutOfBoundException with illegal bounds") {
     evaluating { insertAt('new, -1, List('a, 'b)) } should produce [IndexOutOfBoundsException]
     evaluating { insertAt('new, 2, List('a, 'b)) } should produce [IndexOutOfBoundsException]
   }
 
-  test("removeAt should succeed") {
+  test("insertAt should succeed") {
     val actual: List[Any] = insertAt('new, 1, List('a, 'b, 'c, 'd))
     val expected: List[Any] = List('a, 'new, 'b, 'c, 'd)
     assert(actual === expected)
