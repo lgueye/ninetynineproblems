@@ -15,6 +15,7 @@ class P24Suite extends FunSuite with ShouldMatchers {
     val max: Int = 49
     val actual: List[Int] = lotto(count, max)
     assert(actual.size === count)
+    if (actual.size > 0) assert(actual.forall(x => (x <= max && x >= 1)))
   }
 
 }
