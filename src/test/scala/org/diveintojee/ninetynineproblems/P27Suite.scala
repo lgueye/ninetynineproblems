@@ -11,26 +11,45 @@ import scala.io.Source
 @RunWith(classOf[JUnitRunner])
 class P27Suite extends FunSuite with ShouldMatchers {
 
-  def loadExpected(s: String): List[List[List[String]]] = {
-    //val lines: List[String]  = io.Source.fromInputStream(getClass.getResourceAsStream(s)).getLines().toList
-    val lines: List[String]  = Source.fromURL(getClass.getResource(s)).getLines().toList
-    val tmp: List[List[String]] = lines map { _.split("|").toList }
-    println(tmp)
-    Nil
+  test("group (3,1) should succeed") {
+    val expected = List(
+      List(List("Aldo", "Beat", "Carla"), List("David")),
+      List(List("Aldo", "Beat", "David"), List("Carla")),
+      List(List("Aldo", "Carla", "David"), List("Beat")),
+      List(List("Beat", "Carla", "David"), List("Aldo"))
+    )
+    val actual = group(List(3, 1), List("Aldo", "Beat", "Carla", "David"))
+    assert(actual === expected)
   }
 
-  test("group should succeed") {
-    val expected = loadExpected("/expected-group.txt")
-    println(expected)
-//    val actual = group(List(2, 2, 5), List("Aldo", "Beat", "Carla", "David", "Evi", "Flip", "Gary", "Hugo", "Ida"))
-//    assert(actual === expected)
+  test("group (2,2) should succeed") {
+    val expected = List(
+      List(List("Aldo", "Beat"), List("Carla", "David")),
+      List(List("Aldo", "Carla"), List("Beat", "David")),
+      List(List("Aldo", "David"), List("Beat", "Carla")),
+      List(List("Beat", "Carla"), List("Aldo", "David")),
+      List(List("Beat", "David"), List("Aldo", "Carla")),
+      List(List("Carla", "David"), List("Aldo", "Beat"))
+    )
+    val actual = group(List(2, 2), List("Aldo", "Beat", "Carla", "David"))
+    assert(actual === expected)
   }
 
-  test("group3 should succeed") {
-    val expected = loadExpected("/expected-group3.txt")
-    println(expected)
-//    val actual = group3(List("Aldo", "Beat", "Carla", "David", "Evi", "Flip", "Gary","Hugo", "Ida"))
-//    assert(actual === expected)
+  test("group (1,3) should succeed") {
+    val expected = List(
+      List(List("Aldo"), List("Beat", "Carla", "David")),
+      List(List("Beat"), List("Aldo", "Carla", "David")),
+      List(List("Carla"), List("Aldo", "Beat", "David")),
+      List(List("David"), List("Aldo", "Beat", "Carla"))
+    )
+    val actual = group(List(1, 3), List("Aldo", "Beat", "Carla", "David"))
+    assert(actual === expected)
+  }
+
+  test("group2 should succeed") {
+    val expected = group(List(1, 3), List("Aldo", "Beat", "Carla", "David"))
+    val actual = group2(List("Aldo", "Beat", "Carla", "David"))
+    assert(actual === expected)
   }
 
 }

@@ -4,26 +4,11 @@ import P26.combinations
 
 object P27 extends App {
 
-  /**
-   *
-   * @param list
-   * @tparam A
-   * @return
-   */
-  def group3[A](list: List[A]): List[List[List[A]]] = for {
-    firstCombination <- combinations(2, list)
+  def group2[A](list: List[A]): List[List[List[A]]] = for {
+    firstCombination <- combinations(1, list)
     exceptFirst = list diff firstCombination
-    secondCombination <- combinations(3, exceptFirst)
-    exceptSecond = exceptFirst diff secondCombination
-  } yield List(firstCombination, secondCombination, exceptSecond)
+  } yield List(firstCombination, exceptFirst)
 
-  /**
-   *
-   * @param distribution
-   * @param list
-   * @tparam A
-   * @return
-   */
   def group[A](distribution: List[Int], list: List[A]): List[List[List[A]]] = distribution match {
     case Nil          => List(Nil)
     case head :: tail =>
