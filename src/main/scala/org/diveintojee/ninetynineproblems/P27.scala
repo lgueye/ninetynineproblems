@@ -9,6 +9,13 @@ object P27 extends App {
     exceptFirst = list diff firstCombination
   } yield List(firstCombination, exceptFirst)
 
+  def group3[A](list: List[A]): List[List[List[A]]] = for {
+    firstCombination <- combinations(2, list)
+    exceptFirst = list diff firstCombination
+    secondCombination <- combinations(3, exceptFirst)
+    exceptSecond = exceptFirst diff secondCombination
+  } yield List(firstCombination, exceptFirst, exceptSecond)
+
   def group[A](distribution: List[Int], list: List[A]): List[List[List[A]]] = distribution match {
     case Nil          => List(Nil)
     case head :: tail =>
