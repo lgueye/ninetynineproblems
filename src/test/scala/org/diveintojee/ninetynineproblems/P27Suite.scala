@@ -6,7 +6,6 @@ import org.scalatest.junit.JUnitRunner
 
 import org.diveintojee.ninetynineproblems.P27._
 import org.scalatest.matchers.ShouldMatchers
-import scala.io.Source
 
 @RunWith(classOf[JUnitRunner])
 class P27Suite extends FunSuite with ShouldMatchers {
