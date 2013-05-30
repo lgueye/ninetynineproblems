@@ -40,4 +40,16 @@ class S99IntSuite extends FunSuite with ShouldMatchers {
     assert(actual === expected)
   }
 
+  test("primeFactorMultiplicity should succeed") {
+    val actual = 315.primeFactorMultiplicity
+    val expected = List((3, 2), (5, 1), (7, 1))
+    assert(actual === expected)
+  }
+
+  test("primeFactorMultiplicityAsMap should succeed") {
+    val actual = 315.primeFactorMultiplicityAsMap
+    val expected = Map(3 -> 2, 5 -> 1, 7 -> 1)
+    assert(actual === expected)
+  }
+
 }

@@ -3,6 +3,7 @@ package org.diveintojee.ninetynineproblems {
   class S99Int(val start: Int) {
 
     import S99Int._
+    import P10.encode
 
     private def divisors: List[Int] =
       for (index <- List.range(1, start + 1) if start % index == 0) yield index
@@ -27,6 +28,12 @@ package org.diveintojee.ninetynineproblems {
         case (_, head :: tail) if (n % head == 0) => primeFactorsR (n / head, head :: tail, head :: acc)
         case (_, head :: tail)                    => primeFactorsR (n, tail, acc)
       }
+
+    def primeFactorMultiplicity: List[(Int, Int)] =
+      encode(primeFactors) map { _.swap}
+
+    def primeFactorMultiplicityAsMap: Map[Int, Int] =
+      Map(primeFactorMultiplicity: _*)
 
   }
 
