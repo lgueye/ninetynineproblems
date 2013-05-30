@@ -10,8 +10,11 @@ package org.diveintojee.ninetynineproblems {
     def divisors: List[Int] =
       for (index <- List.range(1, start + 1) if start % index == 0) yield index
 
-    def isCoprimeTo(n: Int) =
+    def isCoprimeTo(n: Int): Boolean =
       gcd(start, n) == 1
+
+    def totient: Int =
+      (List.range(1, start +1) filter { isCoprimeTo(_) }). size
 
   }
 

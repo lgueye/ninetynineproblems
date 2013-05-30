@@ -28,4 +28,10 @@ class S99IntSuite extends FunSuite with ShouldMatchers {
     assert(actual === expected)
   }
 
+  test("totient should succeed") {
+    val actual = 10.totient
+    val expected = 4
+    assert(actual === expected)
+  }
+
 }
