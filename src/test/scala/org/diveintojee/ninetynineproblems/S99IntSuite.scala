@@ -22,4 +22,10 @@ class S99IntSuite extends FunSuite with ShouldMatchers {
     assert(actual === expected)
   }
 
+  test("isCoprimeTo should succeed") {
+    val actual = 35.isCoprimeTo(64)
+    val expected = true
+    assert(actual === expected)
+  }
+
 }
