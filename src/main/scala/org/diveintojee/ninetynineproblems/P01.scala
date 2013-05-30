@@ -7,7 +7,7 @@ object P01 extends App {
   def last[A] (list: List[A]): A =
     list match {
       case head :: Nil  => head
-      case head :: tail  => last(tail)
+      case head :: tail => last(tail)
       case Nil          => throw new NoSuchElementException
     }
 
