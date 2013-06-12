@@ -64,6 +64,8 @@ class S99Int(val start: Int) {
 
     def listPrimesinRange(r: Range): List[Int] = List.range(r.start, r.end + 1) filter {_.isPrime}
 
+    def goldbachList(r: Range): List[(Int, Int)] =
+      List.range(r.start, r.end + 1) filter {_ % 2 == 0} map {_.goldbach}
 
   }
 }
