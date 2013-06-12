@@ -1,6 +1,8 @@
 package org.diveintojee.ninetynineproblems {
 
-  class S99Int(val start: Int) {
+import scala._
+
+class S99Int(val start: Int) {
 
     import S99Int._
     import P10.encode
@@ -16,6 +18,17 @@ package org.diveintojee.ninetynineproblems {
 
     def totient: Int =
       (List.range(1, start + 1) filter { isCoprimeTo(_) }). size
+
+    def improvedTotient: Int = {
+      println(primeFactorMultiplicity)
+      improvedTotientR(primeFactorMultiplicity, 1)
+    }
+
+    def improvedTotientR(list: List[(Int, Int)], acc: Int): Int =
+      list match {
+        case Nil          => acc
+        case head :: tail => improvedTotientR(tail, (head._1 - 1) * Math.pow(head._1, head._2 - 1).toInt * acc)
+      }
 
     def primeFactors: List[Int] = {
       val primes = (for (i <- 1 to start + 1 if (i.isPrime)) yield i).toList
