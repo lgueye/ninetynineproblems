@@ -58,4 +58,16 @@ class S99IntSuite extends FunSuite with ShouldMatchers {
     assert(actual === expected)
   }
 
+  test("listPrimesinRange should succeed") {
+    val actual = listPrimesinRange(7 to 31)
+    val expected = List(7, 11, 13, 17, 19, 23, 29, 31)
+    assert(actual === expected)
+  }
+
+  test("goldbach should succeed") {
+    val actual = 28.goldbach
+    val expected = (5,23)
+    assert(actual === expected)
+  }
+
 }
