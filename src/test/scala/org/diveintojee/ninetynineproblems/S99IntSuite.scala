@@ -76,4 +76,10 @@ class S99IntSuite extends FunSuite with ShouldMatchers {
     assert(actual === expected)
   }
 
+  test("goldbach list limited should succeed") {
+    val actual = goldbachListLimited(1 to 2000, 50)
+    val expected = List((73, 919), (61, 1321), (67, 1789), (61, 1867))
+    assert(actual === expected)
+  }
+
 }

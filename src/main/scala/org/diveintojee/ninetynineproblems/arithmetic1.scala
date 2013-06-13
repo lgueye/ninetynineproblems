@@ -48,7 +48,11 @@ class S99Int(val start: Int) {
     val primes = listPrimesinRange(1 to start)
     (for {a <- primes; b <- primes; if a + b == start} yield {
       (a, b)
-    }).head
+    }) match {
+      case Nil => null
+      case head :: _ => head
+
+    }
   }
 
 }
@@ -66,6 +70,10 @@ class S99Int(val start: Int) {
 
     def goldbachList(r: Range): List[(Int, Int)] =
       List.range(r.start, r.end + 1) filter {_ % 2 == 0} map {_.goldbach}
+
+    def goldbachListLimited(r: Range, limit: Int): List[(Int, Int)] = {
+      goldbachList(r) filter {x => x != null && x._1 > limit && x._2 > limit}
+    }
 
   }
 }
