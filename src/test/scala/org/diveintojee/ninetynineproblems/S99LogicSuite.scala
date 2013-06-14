@@ -8,7 +8,7 @@ import org.diveintojee.ninetynineproblems.S99Logic._
 import org.scalatest.matchers.ShouldMatchers
 
 /**
- * Truth table tests are base on material from <a href="http://en.wikipedia.org/wiki/Truth_table">Wikipedia truth tables</a>
+ * Truth table tests are based on material from <a href="http://en.wikipedia.org/wiki/Truth_table">Wikipedia truth tables</a>
  */
 @RunWith(classOf[JUnitRunner])
 class S99LogicSuite extends FunSuite with ShouldMatchers {

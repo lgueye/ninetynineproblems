@@ -11,6 +11,7 @@ package org.diveintojee.ninetynineproblems {
         case (true, true) => true
         case _            => false
       }
+
     def or(b: Boolean): Boolean =
       (a, b) match {
         case (true, _) => true
@@ -32,9 +33,11 @@ package org.diveintojee.ninetynineproblems {
 
     def impl(b: Boolean): Boolean =
       not(a) or b
+
   }
 
   object S99Logic {
+
     implicit def boolean2S99Logic(a: Boolean): S99Logic = new S99Logic(a)
 
     def not(a: Boolean) = a match {
@@ -45,8 +48,8 @@ package org.diveintojee.ninetynineproblems {
     def table2(f: (Boolean, Boolean) => Boolean) {
       println("A     B     result")
       for {a <- List(true, false);b <- List(true, false)} println("%-5s %-5s %-5s\n", a, b, f(a, b))
-
     }
+
   }
 
 }
