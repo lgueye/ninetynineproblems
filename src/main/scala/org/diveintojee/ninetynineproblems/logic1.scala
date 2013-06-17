@@ -50,6 +50,14 @@ package org.diveintojee.ninetynineproblems {
       for {a <- List(true, false);b <- List(true, false)} println("%-5s %-5s %-5s\n", a, b, f(a, b))
     }
 
+    def gray(n: Int): List[String] = n match {
+      case 0  => List("")
+      case _  => {
+        val previous = gray(n - 1)
+        (previous map { "0" + _ }) ::: (previous.reverse map { "1" + _ })
+      }
+    }
+
   }
 
 }

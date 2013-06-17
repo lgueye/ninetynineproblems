@@ -181,4 +181,12 @@ class S99LogicSuite extends FunSuite with ShouldMatchers {
     assert(actual === expected)
   }
 
+  test("gray should succeed") {
+    val n = 3
+    val actual = gray(n)
+    val expected = List("000", "001", "011", "010", "110", "111", "101", "100")
+    assert(expected.size === Math.pow(2, n))
+    assert(actual === expected)
+  }
+
 }
