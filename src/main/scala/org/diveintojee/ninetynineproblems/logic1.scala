@@ -58,6 +58,51 @@ package org.diveintojee.ninetynineproblems {
       }
     }
 
+    def huffman(decodedText: String): List[String] =
+      encode (decodedText, codingTable (decodedText, huffmanTree {charsFrequency (decodedText)}))
+
+    private def charsFrequency(decodedText: String): List[(Char, Int)] = ???
+
+    sealed abstract class CodeTree
+    case class Node(left: CodeTree, right: CodeTree, chars: List[Char], weight: Int) extends CodeTree
+    case class Leaf(char: Char, weight: Int) extends CodeTree
+
+    private def huffmanTree(charsFrequency: List[(Char, Int)]): CodeTree = ???
+
+    private def codingTable(decodedText: String, huffmanTree: CodeTree): Map[Char, String] =
+      codingTableAcc(decodedText.toList, huffmanTree, Map.empty)
+
+    private def encodeChar(c: Char, tree: CodeTree): String = encodeCharAcc(c, tree, "")
+
+    private def encodeCharAcc(char: Char, tree: CodeTree, acc: String): String =
+      tree match {
+        case Node(left, right, c, weight) =>
+          if (chars(left).contains(char)) encodeCharAcc(char, left, acc + "0")
+          else encodeCharAcc(char, right, acc + "1")
+        case Leaf(c, w) => acc
+      }
+
+    def weight(tree: CodeTree): Int =
+      tree match {
+        case Node(left, right, chars, w) => weight(left) + weight(right)
+        case Leaf(char, w) => w
+      }
+
+    def chars(tree: CodeTree): List[Char] =
+      tree match {
+        case Node(left, right, c, weight) => c
+        case Leaf(char, w) => List(char)
+      }
+
+    private def codingTableAcc(decodedChars: List[Char], huffmanTree: CodeTree, acc: Map[Char, String]): Map[Char, String] =
+      decodedChars match {
+        case Nil => acc
+        case head :: tail => codingTableAcc(tail, huffmanTree, acc ++ Map(head, encodeChar(head, huffmanTree)))
+      }
+
+    private def encode(decodedText: String, codingTable: Map[Char, String]): List[String] =
+      decodedText.toList map { codingTable(_) }
+
   }
 
 }
