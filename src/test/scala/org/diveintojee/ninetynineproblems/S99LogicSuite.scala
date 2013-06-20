@@ -189,4 +189,40 @@ class S99LogicSuite extends FunSuite with ShouldMatchers {
     assert(actual === expected)
   }
 
+  test("charsFrequency should succeed") {
+    val actual = charsFrequency("aaabbcccc")
+    val expected = List(('b', 2), ('a', 3), ('c', 4))
+    assert(actual === expected)
+  }
+
+  test("leaf weight should succeed") {
+    val actual = weight(Leaf('c', 4))
+    val expected = 4
+    assert(actual === expected)
+  }
+
+  test("node weight should succeed") {
+    val actual = weight(Node (Leaf('b', 2), Leaf('a', 3)))
+    val expected = 2 + 3
+    assert(actual === expected)
+  }
+
+  test("leaf chars should succeed") {
+    val actual = chars(Leaf('c', 4))
+    val expected = 'c'
+    assert(actual === expected)
+  }
+
+  test("node chars should succeed") {
+    val actual = chars(Node (Leaf('b', 2), Leaf('a', 3)))
+    val expected = List('b', 'a')
+    assert(actual === expected)
+  }
+
+  test("huffmanTree should succeed") {
+    val actual = huffmanTree { charsFrequency("aaabbcccc") }
+    val expected = Node (Leaf('c', 4), Node (Leaf('b', 2), Leaf('a', 3)))
+    assert(actual === expected)
+  }
+
 }

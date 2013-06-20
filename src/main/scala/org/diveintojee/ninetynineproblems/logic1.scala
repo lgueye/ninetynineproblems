@@ -58,50 +58,158 @@ package org.diveintojee.ninetynineproblems {
       }
     }
 
+    /**
+     * 1 - From the initial decoded string, build a list of tuples (char, frequency) sorted by frequency asc
+     * 2 - From that list, build a list of leaves
+     * 3 - Until you obtain a single tree:
+     *    * merge the 2 leaves with lowest frequency into one tree
+     *    * build a new list: insert the new tree in the old list, preserve the frequency sort, remove the 2 leaves
+     * 4 - From this tree, build a coding table by traversing all leaves.
+     *    Each character should be represented by a unique bits path : 'a' -> "100110" for example
+     * 5 - From this coding table, translate each char from the initial text into its huffman code
+     *
+     * @param decodedText
+     * @return
+     */
     def huffman(decodedText: String): List[String] =
       encode (decodedText, codingTable (decodedText, huffmanTree {charsFrequency (decodedText)}))
 
-    private def charsFrequency(decodedText: String): List[(Char, Int)] = ???
+    /**
+     * Builds a list of tuples (char, frequency) sorted by frequency asc
+     *
+     * @param decodedText
+     * @return
+     */
+    def charsFrequency(decodedText: String): List[(Char, Int)] =
+      (decodedText.toList groupBy { x => x } mapValues { _.size }).toList
 
     sealed abstract class CodeTree
-    case class Node(left: CodeTree, right: CodeTree, chars: List[Char], weight: Int) extends CodeTree
+    case class Node(left: CodeTree, right: CodeTree) extends CodeTree
     case class Leaf(char: Char, weight: Int) extends CodeTree
 
-    private def huffmanTree(charsFrequency: List[(Char, Int)]): CodeTree = ???
+    /**
+     * Builds a Huffman tree from the frequency list:
+     * Until you obtain a single tree:
+     * - merge the 2 leaves with lowest frequency into one tree
+     * - build a new list: insert the new tree in the old list, preserve the frequency sort, remove the 2 leaves
+     *
+     * @param charsFrequency
+     * @return
+     */
+    def huffmanTree(charsFrequency: List[(Char, Int)]): CodeTree =
+      combine { charsFrequency sortWith { (x,y) => x._2 < y._2 } map { x => Leaf (x._1, x._2)} }
 
+    /**
+     *
+     * @param tree
+     * @return
+     */
+    def weight(tree: CodeTree): Int =
+      tree match {
+        case Node(left, right) => weight(left) + weight(right)
+        case Leaf(char, w) => w
+      }
+
+    /**
+     *
+     * @param tree
+     * @return
+     */
+    def chars(tree: CodeTree): List[Char] =
+      tree match {
+        case Node(left, right) => chars(left) ::: chars(right)
+        case Leaf(char, w) => List(char)
+      }
+
+    /**
+     * Merge 2 leaves
+     *
+     * @param left
+     * @param right
+     * @return
+     */
+    def node(left: CodeTree, right: CodeTree): CodeTree =
+      Node(left, right)
+
+    /**
+     * Insert a tree in the list, preserving frequency order
+     *
+     * @param x
+     * @param xs
+     * @return
+     */
+    def insert(x: CodeTree, xs: List[CodeTree]): List[CodeTree] =
+      if (xs.isEmpty || weight(x) <= weight(xs.head)) x :: xs
+      else xs.head :: insert(x, xs.tail)
+
+    /**
+     * Merge leaves with initial list minus leaves
+     * Do it until the list contains only one tree
+     *
+     * @param trees
+     * @return
+     */
+    private def combine(trees: List[CodeTree]): CodeTree =
+      trees match {
+        case Nil                      => throw new IllegalArgumentException
+        case head :: Nil              => head
+        case left :: right :: tail => combine { insert ( node(left, right), tail) }
+      }
+
+    /**
+     *
+     * @param decodedText
+     * @param huffmanTree
+     * @return
+     */
     private def codingTable(decodedText: String, huffmanTree: CodeTree): Map[Char, String] =
-      codingTableAcc(decodedText.toList, huffmanTree, Map.empty)
+      codingTableAcc(decodedText.toList.groupBy(x=>x).keys.toList, huffmanTree, Map.empty)
 
-    private def encodeChar(c: Char, tree: CodeTree): String = encodeCharAcc(c, tree, "")
+    /**
+     *
+     * @param decodedChars
+     * @param huffmanTree
+     * @param acc
+     * @return
+     */
+    private def codingTableAcc(decodedChars: List[Char], huffmanTree: CodeTree, acc: Map[Char, String]): Map[Char, String] =
+      decodedChars match {
+        case Nil => acc
+        case head :: tail => codingTableAcc(tail, huffmanTree, acc ++ Map( (head, encodeChar(head, huffmanTree)) ))
+      }
 
+    /**
+     *
+     * @param c
+     * @param tree
+     * @return
+     */
+    private def encodeChar(c: Char, tree: CodeTree): String =
+      encodeCharAcc(c, tree, "")
+
+    /**
+     *
+     * @param char
+     * @param tree
+     * @param acc
+     * @return
+     */
     private def encodeCharAcc(char: Char, tree: CodeTree, acc: String): String =
       tree match {
-        case Node(left, right, c, weight) =>
+        case Node(left, right) =>
           if (chars(left).contains(char)) encodeCharAcc(char, left, acc + "0")
           else encodeCharAcc(char, right, acc + "1")
         case Leaf(c, w) => acc
       }
 
-    def weight(tree: CodeTree): Int =
-      tree match {
-        case Node(left, right, chars, w) => weight(left) + weight(right)
-        case Leaf(char, w) => w
-      }
-
-    def chars(tree: CodeTree): List[Char] =
-      tree match {
-        case Node(left, right, c, weight) => c
-        case Leaf(char, w) => List(char)
-      }
-
-    private def codingTableAcc(decodedChars: List[Char], huffmanTree: CodeTree, acc: Map[Char, String]): Map[Char, String] =
-      decodedChars match {
-        case Nil => acc
-        case head :: tail => codingTableAcc(tail, huffmanTree, acc ++ Map(head, encodeChar(head, huffmanTree)))
-      }
-
+    /**
+     *
+     * @param decodedText
+     * @param codingTable
+     * @return
+     */
     private def encode(decodedText: String, codingTable: Map[Char, String]): List[String] =
-      decodedText.toList map { codingTable(_) }
+      decodedText.toList map { codingTable ( _ ) }
 
   }
 
