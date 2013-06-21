@@ -71,7 +71,7 @@ package org.diveintojee.ninetynineproblems {
      * @param decodedText
      * @return
      */
-    def huffman(decodedText: String): List[String] =
+    def huffmanEncoding(decodedText: String): List[String] =
       encode (decodedText, codingTable (decodedText, huffmanTree {charsFrequency (decodedText)}))
 
     /**
@@ -122,16 +122,6 @@ package org.diveintojee.ninetynineproblems {
       }
 
     /**
-     * Merge 2 leaves
-     *
-     * @param left
-     * @param right
-     * @return
-     */
-    def node(left: CodeTree, right: CodeTree): CodeTree =
-      Node(left, right)
-
-    /**
      * Insert a tree in the list, preserving frequency order
      *
      * @param x
@@ -149,33 +139,11 @@ package org.diveintojee.ninetynineproblems {
      * @param trees
      * @return
      */
-    private def combine(trees: List[CodeTree]): CodeTree =
+    def combine(trees: List[CodeTree]): CodeTree =
       trees match {
         case Nil                      => throw new IllegalArgumentException
         case head :: Nil              => head
-        case left :: right :: tail => combine { insert ( node(left, right), tail) }
-      }
-
-    /**
-     *
-     * @param decodedText
-     * @param huffmanTree
-     * @return
-     */
-    private def codingTable(decodedText: String, huffmanTree: CodeTree): Map[Char, String] =
-      codingTableAcc(decodedText.toList.groupBy(x=>x).keys.toList, huffmanTree, Map.empty)
-
-    /**
-     *
-     * @param decodedChars
-     * @param huffmanTree
-     * @param acc
-     * @return
-     */
-    private def codingTableAcc(decodedChars: List[Char], huffmanTree: CodeTree, acc: Map[Char, String]): Map[Char, String] =
-      decodedChars match {
-        case Nil => acc
-        case head :: tail => codingTableAcc(tail, huffmanTree, acc ++ Map( (head, encodeChar(head, huffmanTree)) ))
+        case left :: right :: tail => combine { insert ( Node(left, right), tail) }
       }
 
     /**
@@ -184,8 +152,8 @@ package org.diveintojee.ninetynineproblems {
      * @param tree
      * @return
      */
-    private def encodeChar(c: Char, tree: CodeTree): String =
-      encodeCharAcc(c, tree, "")
+    def encodeChar(c: Char, tree: CodeTree): String =
+      encodeCharR(c, tree, "")
 
     /**
      *
@@ -194,12 +162,37 @@ package org.diveintojee.ninetynineproblems {
      * @param acc
      * @return
      */
-    private def encodeCharAcc(char: Char, tree: CodeTree, acc: String): String =
+    private def encodeCharR(char: Char, tree: CodeTree, acc: String): String =
       tree match {
         case Node(left, right) =>
-          if (chars(left).contains(char)) encodeCharAcc(char, left, acc + "0")
-          else encodeCharAcc(char, right, acc + "1")
+          if (chars(left).contains(char)) encodeCharR(char, left, acc + "0")
+          else encodeCharR(char, right, acc + "1")
         case Leaf(c, w) => acc
+      }
+
+
+    /**
+     * Build a coding table by traversing all leaves.
+     * Each character should be represented by a unique bits path : 'a' -> "100110" for example
+     *
+     * @param decodedText
+     * @param huffmanTree
+     * @return
+     */
+    def codingTable(decodedText: String, huffmanTree: CodeTree): Map[Char, String] =
+      codingTableR(decodedText.toList.groupBy(x => x).keys.toList, huffmanTree, Map.empty)
+
+    /**
+     *
+     * @param decodedChars
+     * @param huffmanTree
+     * @param acc
+     * @return
+     */
+    private def codingTableR(decodedChars: List[Char], huffmanTree: CodeTree, acc: Map[Char, String]): Map[Char, String] =
+      decodedChars match {
+        case Nil => acc
+        case head :: tail => codingTableR(tail, huffmanTree, acc ++ Map( (head, encodeChar(head, huffmanTree)) ))
       }
 
     /**
@@ -208,8 +201,16 @@ package org.diveintojee.ninetynineproblems {
      * @param codingTable
      * @return
      */
-    private def encode(decodedText: String, codingTable: Map[Char, String]): List[String] =
+    def encode(decodedText: String, codingTable: Map[Char, String]): List[String] =
       decodedText.toList map { codingTable ( _ ) }
+
+    def huffman(stringFrequencies: List[(String, Int)]): List[(String, String)] =
+      {
+        val text = (stringFrequencies map {tuple => tuple._1 * tuple._2}).mkString
+        val charFrequencies = stringFrequencies map {tuple => (tuple._1.charAt(0), tuple._2)}
+        codingTable(text, huffmanTree(charFrequencies)).toList map {x => (x._1.toString, x._2)} sortWith( (a, b) => a._1 < b._1)
+      }
+
 
   }
 

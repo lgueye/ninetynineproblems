@@ -209,19 +209,55 @@ class S99LogicSuite extends FunSuite with ShouldMatchers {
 
   test("leaf chars should succeed") {
     val actual = chars(Leaf('c', 4))
-    val expected = 'c'
+    val expected = List('c')
     assert(actual === expected)
   }
 
   test("node chars should succeed") {
-    val actual = chars(Node (Leaf('b', 2), Leaf('a', 3)))
+    val actual = chars(Node(Leaf('b', 2), Leaf('a', 3)))
     val expected = List('b', 'a')
+    assert(actual === expected)
+  }
+
+  test("insert should succeed") {
+    val actual = insert(Leaf('c', 2),  List(Leaf('b', 1), Leaf('a', 3)))
+    val expected = List(Leaf('b', 1), Leaf('c', 2), Leaf('a', 3))
+    assert(actual === expected)
+  }
+
+  test("combine should succeed") {
+    val actual = combine( List(Leaf('b', 2), Leaf('a', 3), Leaf('c', 4)) )
+    val expected = Node (Leaf('c', 4), Node(Leaf('b', 2), Leaf('a', 3)))
     assert(actual === expected)
   }
 
   test("huffmanTree should succeed") {
     val actual = huffmanTree { charsFrequency("aaabbcccc") }
     val expected = Node (Leaf('c', 4), Node (Leaf('b', 2), Leaf('a', 3)))
+    assert(actual === expected)
+  }
+
+  test("encodeChar should succeed") {
+    val actual = encodeChar('a', Node (Leaf('c', 4), Node (Leaf('b', 2), Leaf('a', 3))))
+    val expected = "11"
+    assert(actual === expected)
+  }
+
+  test("codingTable should succeed") {
+    val actual = codingTable("ccccbbaaa", Node (Leaf('c', 4), Node (Leaf('b', 2), Leaf('a', 3))))
+    val expected = Map('c' -> "0", 'b' -> "10", 'a' -> "11")
+    assert(actual === expected)
+  }
+
+  test("encode should succeed") {
+    val actual = encode("ccccbbaaa", Map('c' -> "0", 'b' -> "10", 'a' -> "11"))
+    val expected = List("0", "0", "0", "0", "10", "10", "11", "11", "11")
+    assert(actual === expected)
+  }
+
+  test("huffman should succeed") {
+    val actual = huffman(List(("a", 45), ("b", 13), ("c", 12), ("d", 16), ("e", 9), ("f", 5)))
+    val expected = List(("a","0"), ("b", "101"), ("c","100"), ("d","111"), ("e","1101"), ("f","1100"))
     assert(actual === expected)
   }
 
